@@ -50,7 +50,7 @@ const LoanDetails: React.FC = () => {
 
   const onClickShow = () => {
     const formValues = prePaymentPlanForm.getFieldsValue();
-    const arr = [];
+    const arr: any = [];
     const monthly = formValues.monthly;
     let yearly = formValues.yearly;
     let obj = {};
@@ -67,6 +67,7 @@ const LoanDetails: React.FC = () => {
     }
 
     arr.push(obj);
+    setPrePaymentArr(arr);
   };
 
   const calculateAmount = (tenure: number, amount: number) => {
@@ -142,7 +143,7 @@ const LoanDetails: React.FC = () => {
         </Form>
 
         <Divider />
-        <div>
+        <div className="emi-option">
           <div>
             {form.getFieldsValue().loanAmount > 0 &&
             form.getFieldsValue().interestRate > 0 &&
@@ -167,6 +168,7 @@ const LoanDetails: React.FC = () => {
                   loanAmount: form.getFieldsValue().loanAmount,
                   interestRate: form.getFieldsValue().interestRate,
                   tenure: form.getFieldsValue().tenure,
+                  partialPayments: PrePaymentArr,
                 }}
               ></ReduceTerm>
             ) : (
@@ -191,7 +193,7 @@ const LoanDetails: React.FC = () => {
             label="Monthly"
             name="monthly"
             rules={[
-              { required: true, message: "Please input your loan amount!" },
+              { required: true, message: "Please input your monthly amount!" },
             ]}
           >
             <Input />
@@ -201,7 +203,7 @@ const LoanDetails: React.FC = () => {
             label="Yearly"
             name="yearly"
             rules={[
-              { required: true, message: "Please input your interest rate!" },
+              { required: true, message: "Please input your yearly amount!" },
             ]}
           >
             <Input />

@@ -44,6 +44,8 @@ const ReduceTerm: React.FC<any> = ({ loanDetails }) => {
       (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
       (Math.pow(1 + monthlyRate, tenureMonths) - 1);
 
+    let totalAmountWithoutPartials = emi * tenureMonths;
+
     partialPayments.forEach((payment: any) => {
       // Apply the partial payment to the principal
       principal -= payment.amount;
@@ -54,16 +56,49 @@ const ReduceTerm: React.FC<any> = ({ loanDetails }) => {
         ) / Math.log(1 + monthlyRate);
       tenureMonths = Math.floor(remainingMonths);
     });
+    let totalAmountWithPartials = emi * tenureMonths;
+    let interestPaidWithPartials = totalAmountWithPartials - principal;
 
     let totalAmountPaid = emi * tenureMonths;
     let interestPaid = totalAmountPaid - principal;
+    let totalSavings = totalAmountWithoutPartials - totalAmountWithPartials;
 
-    return {
-      newTenureMonths: tenureMonths,
-      totalAmountPaid: totalAmountPaid.toFixed(2),
-      principalPaid: principal.toFixed(2),
-      interestPaid: interestPaid.toFixed(2),
-    };
+    const tempData: any = [
+      {
+        key: "1",
+        field: "Total Amount Paid",
+        value: totalAmountPaid,
+      },
+      {
+        key: "2",
+        field: "Principle Paid",
+        value: principal,
+      },
+      {
+        key: "3",
+        field: "Interest Paid",
+        value: interestPaid,
+      },
+      {
+        key: "4",
+        field: "Amount Saved",
+        value: totalSavings,
+      },
+      {
+        key: "5",
+        field: "Remaining Months",
+        value: tenureMonths,
+      },
+    ];
+
+    setData(tempData);
+
+    // return {
+    //   newTenureMonths: tenureMonths,
+    //   totalAmountPaid: totalAmountPaid.toFixed(2),
+    //   principalPaid: principal.toFixed(2),
+    //   interestPaid: interestPaid.toFixed(2),
+    // };
   };
 
   //   // Example usage

@@ -3,3 +3,7 @@
     margin: 20px;
     flex-direction: column;
 }
+
+.emi-option {
+    display: flex;
+}
