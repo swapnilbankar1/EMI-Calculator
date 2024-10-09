@@ -60,8 +60,13 @@ const ReduceTerm: React.FC<any> = ({ loanDetails }) => {
     let interestPaidWithPartials = totalAmountWithPartials - principal;
 
     let totalAmountPaid = emi * tenureMonths;
+    totalAmountPaid = +totalAmountPaid.toFixed(2);
     let interestPaid = totalAmountPaid - principal;
+    interestPaid = +interestPaid.toFixed(2);
     let totalSavings = totalAmountWithoutPartials - totalAmountWithPartials;
+    totalSavings = +totalSavings.toFixed(2);
+    principal = +principal.toFixed(2);
+    tenureMonths = +tenureMonths.toFixed(2);
 
     const tempData: any = [
       {
@@ -126,8 +131,10 @@ const ReduceTerm: React.FC<any> = ({ loanDetails }) => {
   useEffect(() => {
     console.log(data);
   }, [data]);
+  
   return (
     <>
+      <h3>Reduce Term</h3>
       <div className="table-width">
         <Table<DataType> columns={columns} dataSource={data} />
       </div>

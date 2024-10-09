@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
 import type { FormProps } from "antd";
-import { Button, Form, Input } from "antd";
+import { Button, Form, InputNumber } from "antd";
 import { Divider } from "antd";
 
 import NoPrePayment from "../NoPrePayment/NoPrePayment";
 
 import "./LoanDetails.css";
 import ReduceTerm from "../ReduceTerm/ReduceTerm";
+import ReduceEMI from "../ReduceEMI/ReduceEMI";
 
 type FieldType = {
   loanAmount?: number;
@@ -94,53 +95,94 @@ const LoanDetails: React.FC = () => {
   return (
     <>
       <div className="main-container">
-        <Form
-          form={form}
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item<FieldType>
-            label="Loan Amount"
-            name="loanAmount"
-            rules={[
-              { required: true, message: "Please input your loan amount!" },
-            ]}
+        <div className="child-container">
+          <Form
+            form={form}
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Input />
-          </Form.Item>
+            <Form.Item<FieldType>
+              label="Loan Amount"
+              name="loanAmount"
+              rules={[
+                { required: true, message: "Please input your loan amount!" },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
 
-          <Form.Item<FieldType>
-            label="Interest Rate"
-            name="interestRate"
-            rules={[
-              { required: true, message: "Please input your interest rate!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item<FieldType>
-            label="Tenure"
-            name="tenure"
-            rules={[{ required: true, message: "Please input your tenure!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item<FieldType> label="Starting EMI">
-            <Input disabled value={emi} />
-          </Form.Item>
+            <Form.Item<FieldType>
+              label="Interest Rate"
+              name="interestRate"
+              rules={[
+                { required: true, message: "Please input your interest rate!" },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item<FieldType>
+              label="Tenure"
+              name="tenure"
+              rules={[{ required: true, message: "Please input your tenure!" }]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item<FieldType> label="Starting EMI">
+              < InputNumber disabled value={emi} />
+            </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" onClick={onClickSubmit}>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button type="primary" onClick={onClickSubmit}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+          <Form
+            form={prePaymentPlanForm}
+            name="basic"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            style={{ maxWidth: 600 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item<PrePaymentFieldType>
+              label="Monthly"
+              name="monthly"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your monthly amount!",
+                },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+
+            <Form.Item<PrePaymentFieldType>
+              label="Yearly"
+              name="yearly"
+              rules={[
+                { required: true, message: "Please input your yearly amount!" },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button type="primary" onClick={onClickShow}>
+                Show EMI options
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
 
         <Divider />
         <div className="emi-option">
@@ -175,45 +217,25 @@ const LoanDetails: React.FC = () => {
               "Payment details will be shown here"
             )}
           </div>
+          <div>
+            {form.getFieldsValue().loanAmount > 0 &&
+            form.getFieldsValue().interestRate > 0 &&
+            form.getFieldsValue().tenure > 0 ? (
+              <ReduceEMI
+                loanDetails={{
+                  loanAmount: form.getFieldsValue().loanAmount,
+                  interestRate: form.getFieldsValue().interestRate,
+                  tenure: form.getFieldsValue().tenure,
+                  partialPayments: PrePaymentArr,
+                }}
+              ></ReduceEMI>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
 
         <Divider></Divider>
-        <Form
-          form={prePaymentPlanForm}
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item<PrePaymentFieldType>
-            label="Monthly"
-            name="monthly"
-            rules={[
-              { required: true, message: "Please input your monthly amount!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item<PrePaymentFieldType>
-            label="Yearly"
-            name="yearly"
-            rules={[
-              { required: true, message: "Please input your yearly amount!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" onClick={onClickShow}>
-              Show EMI options
-            </Button>
-          </Form.Item>
-        </Form>
       </div>
     </>
   );

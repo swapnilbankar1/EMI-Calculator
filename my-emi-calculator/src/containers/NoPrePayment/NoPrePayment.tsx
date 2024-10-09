@@ -49,17 +49,17 @@ const NoPrePayment: React.FC<any> = ({ loanDetails }) => {
       {
         key: "1",
         field: "Total Amount Paid",
-        value: totalAmountPaid,
+        value: +totalAmountPaid.toFixed(2),
       },
       {
         key: "2",
         field: "Principle Paid",
-        value: principal,
+        value: +principal.toFixed(2),
       },
       {
         key: "3",
         field: "Interest Paid",
-        value: interestPaid,
+        value: +interestPaid.toFixed(2),
       },
     ];
     setData(tempData);
@@ -71,6 +71,7 @@ const NoPrePayment: React.FC<any> = ({ loanDetails }) => {
 
   return (
     <>
+      <h3>No Pre Payment</h3>
       <div className="table-width">
         <Table<DataType> columns={columns} dataSource={data} />
       </div>

@@ -6,4 +6,9 @@
 
 .emi-option {
     display: flex;
+    justify-content: space-evenly;
+}
+
+.child-container {
+    display: flex;
 }
